@@ -1,7 +1,9 @@
 import type { AutomationIntegrationId, ScheduledTask, Workflow } from "@/types";
 import { getSlackConfiguration, isSlackConfigured } from "../slack/config";
+import { scrubSecrets } from "../utils/secret-scrubber";
 import { getDbClient } from "./db";
 import { getOAuthApp, getOAuthTokens } from "./db-queries/oauth";
+import { scrubJsonValue } from "./scrub-json";
 
 export type AutomationKind = "schedule" | "workflow";
 export type AutomationState = "running" | "needs_setup";
@@ -407,8 +409,8 @@ export async function recordWorkflowPreflightFailure(input: {
         runId,
         input.workflowId,
         input.triggerType,
-        input.triggerData === undefined ? null : JSON.stringify(input.triggerData),
-        input.failureReason,
+        input.triggerData === undefined ? null : scrubJsonValue(input.triggerData),
+        scrubSecrets(input.failureReason),
         input.createdBy ?? null,
         timestamp,
         timestamp,
