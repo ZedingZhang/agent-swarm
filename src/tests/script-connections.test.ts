@@ -606,6 +606,9 @@ describe("script connections", () => {
       markMigrationApplied(database, "195_approval_request_approvals.sql");
       // 196 alters skills, which this migration-112-only fixture does not create.
       markMigrationApplied(database, "196_skill_invocations.sql");
+      // 199 alters workflow_runs and workflow_run_steps, which this
+      // migration-112-only fixture does not create.
+      markMigrationApplied(database, "199_workflow_replay_columns.sql");
 
       const id = crypto.randomUUID();
       const now = new Date().toISOString();
