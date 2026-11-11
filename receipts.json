@@ -1,0 +1,32 @@
+[
+  {
+    "receivedAt": "2026-11-11T16:39:05.425Z",
+    "origin": "http://192.168.31.45:64688",
+    "validUuidV4": true,
+    "body": {
+      "submission_id": "b79bf3ec-3c00-4c97-bee2-43978caa8413",
+      "user_id": "f2b471f0-f7b3-4bd7-a8e2-247fa88784cd",
+      "org_name": "HTTP QA swarm",
+      "swarm_version": "2.11.0",
+      "email": "browser-qa@example.com",
+      "newsletter_consent": false,
+      "message": "[fleet_report] subscribed to the monthly fleet benchmark report",
+      "submitted_at": "2026-11-11T16:39:05.420Z"
+    }
+  },
+  {
+    "receivedAt": "2026-11-11T16:39:44.317Z",
+    "origin": "http://localhost:64688",
+    "validUuidV4": true,
+    "body": {
+      "submission_id": "4309289d-38e0-4781-9759-fe0e106bfedd",
+      "user_id": "f2b471f0-f7b3-4bd7-a8e2-247fa88784cd",
+      "org_name": "HTTP QA swarm",
+      "swarm_version": "2.11.0",
+      "email": "localhost-control@example.com",
+      "newsletter_consent": false,
+      "message": "[fleet_report] subscribed to the monthly fleet benchmark report",
+      "submitted_at": "2026-11-11T16:39:44.315Z"
+    }
+  }
+]
