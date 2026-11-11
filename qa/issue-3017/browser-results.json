@@ -1,0 +1,26 @@
+[
+  {
+    "viewport": "desktop-light",
+    "oldLabelRestored": true,
+    "newLabelPreserved": true,
+    "pageErrors": []
+  },
+  {
+    "viewport": "mobile-light",
+    "oldLabelRestored": true,
+    "newLabelPreserved": true,
+    "pageErrors": []
+  },
+  {
+    "viewport": "desktop-dark",
+    "oldLabelRestored": true,
+    "newLabelPreserved": true,
+    "pageErrors": []
+  },
+  {
+    "viewport": "mobile-dark",
+    "oldLabelRestored": true,
+    "newLabelPreserved": true,
+    "pageErrors": []
+  }
+]
