@@ -1,0 +1,31 @@
+{
+  "componentHarness": true,
+  "errors": [],
+  "results": [
+    {
+      "scenario": "pr-triage",
+      "expected": "/templates/pr-triage",
+      "actual": "/templates/pr-triage"
+    },
+    {
+      "scenario": "issue-to-pr",
+      "expected": "/templates/issue-to-pr",
+      "actual": "/templates/issue-to-pr"
+    },
+    {
+      "scenario": "bug-intake",
+      "expected": "/templates/bug-intake",
+      "actual": "/templates/bug-intake"
+    },
+    {
+      "scenario": "hello-world",
+      "expected": "/templates/hello-world",
+      "actual": "/templates/hello-world"
+    },
+    {
+      "scenario": "explicit override + keyboard",
+      "expected": "/templates",
+      "actual": "/templates"
+    }
+  ]
+}
