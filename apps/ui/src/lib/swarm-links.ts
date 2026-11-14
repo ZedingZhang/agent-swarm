@@ -118,6 +118,12 @@ export function isGithubHost(url: URL, webUrl: string | null | undefined): boole
   return url.host.toLowerCase() === host;
 }
 const GITHUB_NAME = /^[A-Za-z0-9_.-]+$/;
+
+/** Owner or repo. Dots are allowed (`my.user`); a name of only dots is not. */
+function isGithubName(name: string): boolean {
+  return GITHUB_NAME.test(name) && !/^\.+$/.test(name);
+}
+
 /** First path segments that are GitHub pages, not an owner. */
 const GITHUB_RESERVED_OWNERS = new Set([
   "about",
@@ -149,7 +155,7 @@ function githubLink(
   rest: { number?: number; sha?: string },
   href: string,
 ): SwarmLink | null {
-  if (!GITHUB_NAME.test(owner) || !GITHUB_NAME.test(repo) || /^\.+$/.test(repo)) return null;
+  if (!isGithubName(owner) || !isGithubName(repo)) return null;
   if (GITHUB_RESERVED_OWNERS.has(owner.toLowerCase())) return null;
   return {
     type: "github",

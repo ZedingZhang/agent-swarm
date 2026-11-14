@@ -186,6 +186,34 @@ describe("parseSwarmLink: github", () => {
     expect(parse("https://example.com/o/r/pull/1")).toBeNull();
   });
 
+  test("a dot-only owner stays a plain link, and a dotted owner stays a chip", () => {
+    // `.` and `..` are removed by the URL parser. Three or more dots survive as the owner.
+    expect(parse("https://github.com/./repo")).toBeNull();
+    expect(parse("https://github.com/../repo/issues/1")).toBeNull();
+    expect(parse("https://github.com/.../repo")).toBeNull();
+    expect(parse("https://github.com/..../repo/issues/1")).toBeNull();
+    expect(parse("https://github.com/.../repo/pull/2")).toBeNull();
+    expect(parse("https://github.com/.../repo/commit/a1b2c3d")).toBeNull();
+    expect(parse("https://github.com/o/...")).toBeNull();
+    expect(parse("https://github.com/my.user/my.repo")).toMatchObject({
+      kind: "repo",
+      owner: "my.user",
+      repo: "my.repo",
+    });
+    expect(parse("https://github.com/my.user/my.repo/pull/2")).toMatchObject({
+      kind: "pull",
+      owner: "my.user",
+      repo: "my.repo",
+      number: 2,
+    });
+    expect(parse("https://github.com/.user/repo.name/issues/8")).toMatchObject({
+      kind: "issue",
+      owner: ".user",
+      repo: "repo.name",
+      number: 8,
+    });
+  });
+
   test("labels and hover titles", () => {
     expect(githubLabel(github("https://github.com/desplega-ai/agent-swarm/pull/2605"))).toBe(
       "agent-swarm#2605",
@@ -230,6 +258,42 @@ describe("parseGithubShorthand", () => {
     expect(parseGithubShorthand("https://github.com/o/r/pull/1")).toBeNull();
   });
 
+  test("a dot-only owner stays plain text, and a dotted owner stays a link", () => {
+    expect(parseGithubShorthand("./repo#1")).toBeNull();
+    expect(parseGithubShorthand(" ../repo#1 ")).toBeNull();
+    expect(parseGithubShorthand(".../repo#1")).toBeNull();
+    expect(parseGithubShorthand("./repo@a1b2c3d")).toBeNull();
+    expect(parseGithubShorthand("o/...#1")).toBeNull();
+    expect(parseGithubShorthand("my.user/my.repo#4")).toEqual({
+      type: "github",
+      kind: "ref",
+      owner: "my.user",
+      repo: "my.repo",
+      number: 4,
+      sha: null,
+      href: "https://github.com/my.user/my.repo/issues/4",
+    });
+    expect(parseGithubShorthand(".user/repo#1")).toMatchObject({
+      owner: ".user",
+      repo: "repo",
+      number: 1,
+    });
+    expect(parseGithubShorthand("user.name/repo@a1b2c3d")).toMatchObject({
+      kind: "commit",
+      owner: "user.name",
+      repo: "repo",
+      sha: "a1b2c3d",
+      href: "https://github.com/user.name/repo/commit/a1b2c3d",
+    });
+    expect(parseSwarmLinkOrRef("./repo#1", ORIGINS)).toBeNull();
+    expect(parseSwarmLinkOrRef("my.user/repo#1", ORIGINS)).toMatchObject({
+      type: "github",
+      owner: "my.user",
+      repo: "repo",
+      number: 1,
+    });
+  });
+
   test("parseSwarmLinkOrRef takes shorthand, then URLs", () => {
     expect(parseSwarmLinkOrRef("o/r#1", ORIGINS)).toMatchObject({ type: "github" });
     expect(parseSwarmLinkOrRef(`/tasks/${TASK_ID}`, ORIGINS)).toMatchObject({ type: "dashboard" });
@@ -259,6 +323,17 @@ describe("GitHub Enterprise Server web base", () => {
     });
     expect(parseGithubShorthand("o/r@a1b2c3d", "https://ghe.test")).toMatchObject({
       href: "https://ghe.test/o/r/commit/a1b2c3d",
+    });
+  });
+
+  test("a dot-only owner stays plain text, and a dotted owner stays a link", () => {
+    expect(parseGithubShorthand("./repo#7", "https://ghe.test")).toBeNull();
+    expect(parse("https://ghe.test/.../repo/pull/7", GHES)).toBeNull();
+    expect(parse("https://ghe.test/my.user/repo/pull/7", GHES)).toMatchObject({
+      kind: "pull",
+      owner: "my.user",
+      number: 7,
+      href: "https://ghe.test/my.user/repo/pull/7",
     });
   });
 
